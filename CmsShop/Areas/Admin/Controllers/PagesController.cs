@@ -87,7 +87,7 @@ namespace CmsShop.Areas.Admin.Controllers
 
 
 
-        // Get: Admin/Pages/EditPage
+        // GET: Admin/Pages/EditPage
         [HttpGet]
         public ActionResult EditPage(int id)
         {
@@ -105,7 +105,57 @@ namespace CmsShop.Areas.Admin.Controllers
                 model = new PageVM(dto);
             }
 
+            return View(model);
+        }
+        // POST: Admin/Pages/EditPage
+        public ActionResult EditPage(PageVM model)
+        {
+            if (!ModelState.IsValid)
+            {
                 return View(model);
+            }
+            using (Db db = new Db())
+            {
+                //get id of a page that we want to edit
+                int id = model.Id;
+                //initializing slug below in case to make sure that following path(1) it is that one specific case 
+                string slug = "home";
+                // getting a specific page to edit
+                PageDTO dto = db.Pages.Find(id);
+                
+                if (model.Slug != "home")
+                {
+                    if (string.IsNullOrWhiteSpace(model.Slug))
+                    {
+
+                        slug = model.Title.Replace(" ", "-").ToLower();
+                    }
+                    else
+                    {
+                        //path(1) - Slug is empty -> therefore is has a "home" value
+                        slug = model.Slug.Replace(" ", "-").ToLower();
+                    }
+                }
+                //checking page and slug uniqueness
+                if (db.Pages.Where(x => x.Id != id).Any(x => x.Title == model.Title) || 
+                    db.Pages.Where(x => x.Id != id).Any(x => x.Slug == slug))
+                {
+                    ModelState.AddModelError("", "Strona, lub adres już istnieje w bazie");
+                }
+                //page modification
+                dto.Title = model.Title;
+                dto.Slug = slug;
+                dto.HasSidebar = model.HasSidebar;
+                dto.Body = model.Body;
+
+                //saving an edited page to the database
+                db.SaveChanges();
+            }
+            //setting a short message about editing the website
+            TempData["SM"] = "Strona została edytowana!";
+
+            //redirecting to the editpage endpoint
+            return RedirectToAction("EditPage");
         }
     }
 }
