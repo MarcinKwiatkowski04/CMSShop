@@ -77,3 +77,7 @@ C:\Users\lenovo\source\repos\CmsShop\CmsShop\obj\Debug\CmsShop.csproj.CoreCompil
 C:\Users\lenovo\source\repos\CmsShop\CmsShop\obj\Debug\CmsShop.csproj.CopyComplete
 C:\Users\lenovo\source\repos\CmsShop\CmsShop\obj\Debug\CmsShop.dll
 C:\Users\lenovo\source\repos\CmsShop\CmsShop\obj\Debug\CmsShop.pdb
+C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\EntityFramework.dll
+C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\EntityFramework.SqlServer.dll
+C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\EntityFramework.xml
+C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\EntityFramework.SqlServer.xml
