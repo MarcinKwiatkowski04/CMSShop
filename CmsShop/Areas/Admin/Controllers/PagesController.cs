@@ -76,11 +76,13 @@ namespace CmsShop.Areas.Admin.Controllers
                 dto.HasSidebar = model.HasSidebar;
                 dto.Sorting = 1000;
 
-                //Tutaj koniec
-                //db.Pages.Add()
+                //DTO save
+                db.Pages.Add(dto);
+                db.SaveChanges();
             }
+            TempData["SM"] = "Dodałeś nową stronę!";
 
-            return View();
+            return RedirectToAction("AddPage");
         }
     }
 }
