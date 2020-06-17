@@ -48,7 +48,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 //initializing PageDTO
                 PageDTO dto = new PageDTO();
 
-                
+
                 //adding a title as a page address in case this field is not completed 
                 if (string.IsNullOrEmpty(model.Slug))
                 {
@@ -83,6 +83,29 @@ namespace CmsShop.Areas.Admin.Controllers
             TempData["SM"] = "Dodałeś nową stronę!";
 
             return RedirectToAction("AddPage");
+        }
+
+
+
+        // Get: Admin/Pages/EditPage
+        [HttpGet]
+        public ActionResult EditPage(int id)
+        {
+            PageVM model;
+
+            using (Db db = new Db())
+            {
+                //getting a page from the database instead of creating a whole new procedure
+                PageDTO dto = db.Pages.Find(id);
+                //checking whether this page is existing and valid in the database
+                if (dto == null)
+                {
+                    return Content("Podana strona nie istnieje");
+                }
+                model = new PageVM(dto);
+            }
+
+                return View(model);
         }
     }
 }
