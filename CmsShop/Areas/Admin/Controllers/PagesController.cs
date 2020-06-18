@@ -158,6 +158,7 @@ namespace CmsShop.Areas.Admin.Controllers
             //redirecting to the editpage endpoint
             return RedirectToAction("EditPage");
         }
+        // GET: Admin/Pages/Details/id
         public ActionResult Details(int id)
         {
             //declaration of pageViewModel
@@ -177,6 +178,20 @@ namespace CmsShop.Areas.Admin.Controllers
 
             }
             return View(model);
+        }
+        // GET: Admin/Pages/Delete/id
+        public ActionResult Delete(int id)
+        {
+            using (Db db = new Db())
+            {
+                //getting a page from the database
+                PageDTO dto = db.Pages.Find(id);
+                //actual deleting a page 
+                db.Pages.Remove(dto);
+                //saving changes
+                db.SaveChanges();
+            }
+                return RedirectToAction("Index");
         }
     }
 }
