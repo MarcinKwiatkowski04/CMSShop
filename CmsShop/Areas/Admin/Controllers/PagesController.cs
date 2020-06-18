@@ -1,6 +1,7 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Pages;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity.Infrastructure.MappingViews;
 using System.Linq;
 using System.Reflection;
@@ -109,6 +110,7 @@ namespace CmsShop.Areas.Admin.Controllers
             return View(model);
         }
         // POST: Admin/Pages/EditPage
+        [HttpPost]
         public ActionResult EditPage(PageVM model)
         {
             if (!ModelState.IsValid)
@@ -159,6 +161,7 @@ namespace CmsShop.Areas.Admin.Controllers
             return RedirectToAction("EditPage");
         }
         // GET: Admin/Pages/Details/id
+        [HttpGet]
         public ActionResult Details(int id)
         {
             //declaration of pageViewModel
@@ -180,6 +183,7 @@ namespace CmsShop.Areas.Admin.Controllers
             return View(model);
         }
         // GET: Admin/Pages/Delete/id
+        [HttpGet]
         public ActionResult Delete(int id)
         {
             using (Db db = new Db())
@@ -192,6 +196,26 @@ namespace CmsShop.Areas.Admin.Controllers
                 db.SaveChanges();
             }
                 return RedirectToAction("Index");
+        }
+        // POST: Admin/Pages/ReorderPages
+        [HttpPost]
+        public ActionResult ReorderPages(int[] id)
+        {
+            using (Db db = new Db())
+            {
+                int count = 1;
+                PageDTO dto;
+                //pages sorting and saving them to the database
+                foreach (var pageId in id)
+                {
+                    dto = db.Pages.Find(pageId);
+                    dto.Sorting = count;
+                    db.SaveChanges();
+                    count++;
+                }
+            }
+
+                return View();
         }
     }
 }
