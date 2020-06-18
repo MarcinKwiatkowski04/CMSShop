@@ -1,6 +1,7 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Pages;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure.MappingViews;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
@@ -118,7 +119,7 @@ namespace CmsShop.Areas.Admin.Controllers
             {
                 //get id of a page that we want to edit
                 int id = model.Id;
-                //initializing slug below in case to make sure that following path(1) it is that one specific case 
+                //initializing slug below in case to make sure that following path(1), it is that one specific case 
                 string slug = "home";
                 // getting a specific page to edit
                 PageDTO dto = db.Pages.Find(id);
@@ -156,6 +157,26 @@ namespace CmsShop.Areas.Admin.Controllers
 
             //redirecting to the editpage endpoint
             return RedirectToAction("EditPage");
+        }
+        public ActionResult Details(int id)
+        {
+            //declaration of pageViewModel
+            PageVM model;
+            using (Db db = new Db())
+            {
+                //getting a page by id, to show it's details
+                PageDTO dto = db.Pages.Find(id);
+
+                //checking if there is a page with a given id
+                if(dto == null)
+                {
+                    return Content("Strona nie istnieje");
+                }
+                //initializing PageVM by above website
+                model = new PageVM(dto);
+
+            }
+            return View(model);
         }
     }
 }
