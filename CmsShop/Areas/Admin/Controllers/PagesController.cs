@@ -125,7 +125,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 string slug = "home";
                 // getting a specific page to edit
                 PageDTO dto = db.Pages.Find(id);
-                
+
                 if (model.Slug != "home")
                 {
                     if (string.IsNullOrWhiteSpace(model.Slug))
@@ -140,7 +140,7 @@ namespace CmsShop.Areas.Admin.Controllers
                     }
                 }
                 //checking page and slug uniqueness
-                if (db.Pages.Where(x => x.Id != id).Any(x => x.Title == model.Title) || 
+                if (db.Pages.Where(x => x.Id != id).Any(x => x.Title == model.Title) ||
                     db.Pages.Where(x => x.Id != id).Any(x => x.Slug == slug))
                 {
                     ModelState.AddModelError("", "Strona, lub adres już istnieje w bazie");
@@ -172,7 +172,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 PageDTO dto = db.Pages.Find(id);
 
                 //checking if there is a page with a given id
-                if(dto == null)
+                if (dto == null)
                 {
                     return Content("Strona nie istnieje");
                 }
@@ -195,7 +195,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 //saving changes
                 db.SaveChanges();
             }
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
         // POST: Admin/Pages/ReorderPages
         [HttpPost]
@@ -215,7 +215,24 @@ namespace CmsShop.Areas.Admin.Controllers
                 }
             }
 
-                return View();
+            return View();
         }
+        [HttpPost]
+        public ActionResult EditSidebar()
+        {
+            SidebarVM model;
+            using (Db db = new Db())
+            {
+                SidebarDTO dto = db.Sidebar.Find(1);
+                //model initializing
+                model = new SidebarVM(dto);
+
+            }
+
+
+            return View(model);
+
+        }
+
     }
 }
