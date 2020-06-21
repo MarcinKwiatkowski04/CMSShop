@@ -50,6 +50,7 @@ else
 
 }
 @section scripts{
+
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <script>
         $(function () {
@@ -71,8 +72,8 @@ else
                 e.preventDefault();
                 var catName = newCatTextInput.val();
                 if (catName.length < 3) {
-                    alert("Nazwa kategorii musi zawierać do najmniej trzy znaki.")
-                    return false;
+                    alert("Nazwa kategorii musi zawierać do najmniej trzy znaki.");
+                    return false
                 }
                 ajaxText.show();
                 var url = "/admin/shop/AddNewCategory"
@@ -82,7 +83,7 @@ else
                         ajaxText.html("<span class='alert alert-danger'> Ten tytuł jest już zajęty </span>")
                         setTimeout(function () {
                             ajaxText.fadeOut("fast", function () {
-                                ajaxText.html("<img src =/Content/img/ajax-loader.gif")
+                                ajaxText.html("<img src=/Content/img/ajax-loader.gif />");
                             });
 
                         }, 2000);
@@ -95,7 +96,7 @@ else
                             ajaxText.html("<span class='alert alert-success'> Kategoria została dodana </span>")
                             setTimeout(function () {
                                 ajaxText.fadeOut("fast", function () {
-                                    ajaxText.html("<img src =/Content/img/ajax-loader.gif")
+                                    ajaxText.html("<img src =/Content/img/ajax-loader.gif />")
                                 });
 
                             }, 2000);
@@ -106,6 +107,7 @@ else
                             toAppend.find("a.delete").attr("href", "/admin/shop/DeleteCategory/" + data);
                             table.append(toAppend);
                             table.sortable("refresh");
+                            
                         }
                     }
                 })
