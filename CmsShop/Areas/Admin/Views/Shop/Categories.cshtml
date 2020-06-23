@@ -37,6 +37,9 @@ else
         {
             <tr id="id_@item.Id">
                 <td>
+                    <div class="ajaxdivtd">
+
+                    </div>
                     @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control" }, @readonly = "readonly" })
                 </td>
                 <td>
@@ -107,7 +110,7 @@ else
                             toAppend.find("a.delete").attr("href", "/admin/shop/DeleteCategory/" + data);
                             table.append(toAppend);
                             table.sortable("refresh");
-                            
+
                         }
                     }
                 })
@@ -132,7 +135,29 @@ else
              */
             $("body").on("click", "a.delete", function () {
                 if (!confirm("Potwierdź usunięcie kategorii")) return false;
-            })
+            });
+
+            /*
+             * Changing the name of a category
+             */
+            var orginalTextBoxValue;
+
+            $("table#pages input.text-box").dblclick(function () {
+                orginalTextBoxValue = $(this).val();
+                $(this).attr("readonly", false);
+            });
+            $("table#pages input.text-box").keyup(function (e) {
+                if (e.keyCode == 13) {
+                    @(this).blur();
+                }
+            });
+            $("table#pages input.text-box").blur(function () {
+                var $this = $(this);
+                var ajaxdiv = $this.parent().find(".ajaxdivtd");
+                var newCatName = $this.val();
+                var id = $this.parent().parent().attr("id").substring(3);
+                var url = "admin/shop/RenameCategory";
+            });
         })
     </script>
 }
