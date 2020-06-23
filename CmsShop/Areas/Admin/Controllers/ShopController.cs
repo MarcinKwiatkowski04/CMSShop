@@ -32,7 +32,7 @@ namespace CmsShop.Areas.Admin.Controllers
             string id;
             using (Db db = new Db())
             {
-                if (db.Categories.Any(x=>x.Name == catName))
+                if (db.Categories.Any(x => x.Name == catName))
                 {
                     return "tytulzajety";
                 }
@@ -40,7 +40,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 dto.Name = catName;
                 dto.Slug = catName.Replace(" ", "-").ToLower();
                 dto.Sorting = 1000;
-                //zapis do bazy
+                //save to database
                 db.Categories.Add(dto);
                 db.SaveChanges();
 
