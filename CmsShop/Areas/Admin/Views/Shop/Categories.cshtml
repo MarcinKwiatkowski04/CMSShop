@@ -157,7 +157,30 @@ else
                 var newCatName = $this.val();
                 var id = $this.parent().parent().attr("id").substring(3);
                 var url = "admin/shop/RenameCategory";
+
+                if (newCatName.length < 2) {
+                    alert("Nazwa kategorii musi mieć co najmniej 2 znaki");
+                    $this.attr("readonly", true);
+                    return false;
+                }
+                $.post(url, { newCatName: newCatName, id: id }, function (data) {
+                    var response = data.trim();
+                    if (response == "tytulzajety") {
+                        $this.val(orginalTextBoxValue);
+                        ajaxdiv.html("<span class = 'alert alert-danger'> Ta nazwa kategorii jest już zajęta </span>").show();
+
+                    } else {
+                        ajaxdiv.html("<span class = 'alert alert-success'> Nazwa kategorii została zmieniona </span>").show();
+                    }
+                    setTimeout(function () {
+                        ajaxdiv.fadeOut("fast", function () {
+                            ajaxdiv.html("");
+                        });
+                    }, 2000);
+                }).done(function () {
+                    $this.attr("readonly", true);
+                });
             });
-        })
+        });
     </script>
 }
