@@ -25,7 +25,7 @@
 }
 else
 {
-    <table class="table sorting" id="pages">
+    <table class="table sorting categories" id="pages">
         <tr class="home">
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -126,6 +126,13 @@ else
                     });
                 }
             });
+
+            /*
+             * Deleting categories:
+             */
+            $("body").on("click", "a.delete", function () {
+                if (!confirm("Potwierdź usunięcie kategorii")) return false;
+            })
         })
     </script>
 }
