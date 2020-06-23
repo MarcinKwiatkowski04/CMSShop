@@ -1,5 +1,6 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Shop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -13,12 +14,12 @@ namespace CmsShop.Areas.Admin.Controllers
         {
             //list of categories to display:
             List<CategoryVM> categoryVMList;
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
                 categoryVMList = db.Categories
                     .ToArray().
-                    OrderBy(x=>x.Sorting).
-                    Select(x =>new CategoryVM(x)).ToList();
+                    OrderBy(x => x.Sorting).
+                    Select(x => new CategoryVM(x)).ToList();
 
 
             }
@@ -47,6 +48,25 @@ namespace CmsShop.Areas.Admin.Controllers
                 id = dto.Id.ToString();
             }
             return id;
+        }
+        //Post: Admin/Shop/ReorderCategories
+        [HttpPost]
+        public ActionResult ReorderCategories(int[] id)
+        {
+
+            using (Db db = new Db())
+            {
+                int count = 1;
+                CategoryDTO dto;
+                foreach (var catId in id)
+                {
+                    dto = db.Categories.Find(catId);
+                    dto.Sorting = count;
+                    db.SaveChanges();
+                    count++;
+                }
+            }
+            return View();
         }
     }
 }
