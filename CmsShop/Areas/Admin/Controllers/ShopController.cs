@@ -68,7 +68,7 @@ namespace CmsShop.Areas.Admin.Controllers
             }
             return View();
         }
-        //Post: Admin/Shop/DeleteCategory
+        //GET: Admin/Shop/DeleteCategory
         [HttpGet]
         public ActionResult DeleteCategory(int id)
         {
@@ -80,6 +80,26 @@ namespace CmsShop.Areas.Admin.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("Categories");
+        }
+        //POST: Admin/Shop/RenameCategory
+        [HttpPost]
+        public string RenameCategory(string newCatName, int id)
+        {
+
+            using (Db db = new Db())
+            {
+                if (db.Categories.Any(x => x.Name == newCatName))
+                {
+                    return "tytulzajety";
+                }
+                CategoryDTO dto = db.Categories.Find(id);
+
+                dto.Name = newCatName;
+                dto.Slug = newCatName.Replace(" ", "-").ToLower();
+
+                db.SaveChanges();
+            }
+            return "Ok";
         }
     }
 }
