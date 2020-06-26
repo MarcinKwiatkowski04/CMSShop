@@ -157,7 +157,7 @@ namespace CmsShop.Areas.Admin.Controllers
             }
 
             TempData["SM"] = "Dodałeś produkt";
-
+            //region to post images
             #region UploadImage
 
             #endregion
