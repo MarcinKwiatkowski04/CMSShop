@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace CmsShop.Areas.Admin.Controllers
@@ -207,15 +208,28 @@ namespace CmsShop.Areas.Admin.Controllers
 
                         return View(model);
                     }
-
-
                 }
-            }
+                string imageName = file.FileName;
+                using (Db db = new Db())
+                {
+                    ProductDTO dto = db.Products.Find(id);
+                    dto.ImageName = imageName;
+                    db.SaveChanges();
+                }
 
+                var path = string.Format("{0}\\{1}", pathString2, imageName);
+                var path2 = string.Format("{0}\\{1}", pathString3, imageName);
+                //original picture
+                file.SaveAs(path);
+                //thumbnail
+                WebImage img = new WebImage(file.InputStream);
+                img.Resize(200, 200);
+                img.Save(path2);
+            }
             #endregion
 
 
-            return View(model);
+            return RedirectToAction("AddProduct");
         }
     }
 
