@@ -1,5 +1,6 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Shop;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -231,6 +232,33 @@ namespace CmsShop.Areas.Admin.Controllers
 
             return RedirectToAction("AddProduct");
         }
+
+        // GET:Admin/Shop/Products
+        [HttpGet]
+        public ActionResult Products(int? page, int? catId)
+        {
+            List<ProductVM> listOfProductVM;
+            //if there is no page number, we set it to "1":
+            var pageNumber = page ?? 1;
+            using (Db db = new Db())
+            {
+                listOfProductVM = db.Products.ToArray()
+                    .Where(x => catId == null || catId == 0 || x.CategoryId == catId)
+                    .Select(x => new ProductVM(x))
+                    .ToList();
+                //there might be a mistake
+                ViewBag.Categories = new SelectedList(db.Categories.ToList(), "Id", "Name");
+
+                ViewBag.SelectedCat = catId.ToString();
+                
+            }
+
+            var onePageOfProducts = listOfProductVM.ToPagedList(pageNumber, 3);
+            ViewBag.OnePageOfProducts = onePageOfProducts;
+
+            return View(listOfProductVM);
+        }
     }
+
 
 }
