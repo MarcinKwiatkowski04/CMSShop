@@ -2,10 +2,9 @@
 
 @{
     ViewBag.Title = "Produkty";
-}
+};
 
-@using PagedList.Mvc; 
-@using PagedList; 
+@using PagedList;
 
 <h2>Produkty</h2>
 <select id="SelectedCategory" name="SelectedCategory">
@@ -20,67 +19,63 @@
                 @item.Text
             </option>
         }
+        else
+        {
+            <option value="@item.Value">
+                @item.Text
+            </option>
+        }
     }
 </select>
+<br />
+<br />
+
 <p>
-    @Html.ActionLink("Dodaj nowy produkt", "Create")
+    @Html.ActionLink("Dodaj nowy produkt", "AddProduct")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Nazwa
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Slug)
+            Opis
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Cena
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImageName)
+            Zdjęcie
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var product in ViewBag.OnePageOfProducts)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @product.Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Slug)
+                @product.Description
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @product.Price
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                <a href="/admin/shop/EditProduct/@product.Id"></a>
+                <img src="/Images/Uploads/Products/@product.Id/Thumbs/@product.ImageName" />
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Edytuj", "EditProduct", new { id = product.Id }) |
+                @Html.ActionLink("Usuń", "DeleteProduct", new { id = product.Id })
             </td>
         </tr>
     }
 
+
+
 </table>
+
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }));
