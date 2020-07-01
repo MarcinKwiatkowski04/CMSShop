@@ -83,3 +83,5 @@ C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\EntityFramework.xml
 C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\EntityFramework.SqlServer.xml
 C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\PagedList.dll
 C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\PagedList.xml
+C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\PagedList.Mvc.dll
+C:\Users\lenovo\source\repos\CmsShop\CmsShop\bin\PagedList.Mvc.xml

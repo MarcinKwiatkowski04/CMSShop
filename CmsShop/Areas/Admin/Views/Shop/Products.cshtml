@@ -4,6 +4,7 @@
     ViewBag.Title = "Produkty";
 };
 
+@using PagedList.Mvc; 
 @using PagedList;
 
 <h2>Produkty</h2>
@@ -78,4 +79,5 @@
 
 </table>
 
-@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }));
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }))
+
