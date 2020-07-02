@@ -250,7 +250,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 ViewBag.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
 
                 ViewBag.SelectedCat = catId.ToString();
-                
+
             }
 
             var onePageOfProducts = listOfProductVM.ToPagedList(pageNumber, 3);
@@ -258,6 +258,30 @@ namespace CmsShop.Areas.Admin.Controllers
 
             return View(listOfProductVM);
         }
+        // GET:Admin/Shop/EditProduct/id
+        [HttpGet]
+        public ActionResult EditProduct(int id)
+        {
+            ProductVM model;
+            using (Db db = new Db())
+            {
+                ProductDTO dto = db.Products.Find(id);
+
+                if (dto == null)
+                {
+                    return Content("Ten produkt nie istnieje");
+                }
+                model = new ProductVM(dto);
+
+                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                //getting particular images from the given path
+                model.GalleryImages = Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
+                                                .Select(fn => Path.GetFileName(fn));
+
+            }
+            return View(model);
+        }
+
     }
 
 
