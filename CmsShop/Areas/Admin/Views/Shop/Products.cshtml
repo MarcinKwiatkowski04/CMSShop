@@ -4,11 +4,11 @@
     ViewBag.Title = "Produkty";
 };
 
-@using PagedList.Mvc; 
+@using PagedList.Mvc;
 @using PagedList;
 
 <h2>Produkty</h2>
-<select id="SelectedCategory" name="SelectedCategory">
+<select id="SelectCategory" name="SelectCategory">
     <option value="0">
         Wszystkie
     </option>
@@ -80,4 +80,20 @@
 </table>
 
 @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }))
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
+    <script>
+        /* Filtring category*/
+
+        $("#SelectCategory").on("change", function () {
+            var url = $(this).val();
+
+            if (url) {
+                window.location = "/admin/shop/Products?catId=" + url;
+            }
+            return false;
+        });
+
+    </script>
+}

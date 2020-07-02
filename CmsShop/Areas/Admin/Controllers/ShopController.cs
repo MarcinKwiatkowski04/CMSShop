@@ -246,8 +246,8 @@ namespace CmsShop.Areas.Admin.Controllers
                     .Where(x => catId == null || catId == 0 || x.CategoryId == catId)
                     .Select(x => new ProductVM(x))
                     .ToList();
-                //there might be a mistake
-                ViewBag.Categories = new SelectedList(db.Categories.ToList(), "Id", "Name");
+                //ViewBag.Categories = new SelectedList(db.Categories.ToList(), "Id", "Name");
+                ViewBag.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
 
                 ViewBag.SelectedCat = catId.ToString();
                 
