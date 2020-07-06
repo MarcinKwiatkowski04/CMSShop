@@ -1,7 +1,6 @@
 ﻿using CmsShop.Models.Data;
 using CmsShop.Models.ViewModels.Shop;
 using PagedList;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -281,8 +280,32 @@ namespace CmsShop.Areas.Admin.Controllers
             }
             return View(model);
         }
+        // POST:Admin/Shop/EditProduct/
+        [HttpPost]
+        public ActionResult EditProduct(ProductVM model, HttpPostedFileBase file)
+        {
+            int id = model.Id;
+
+            using (Db db = new Db())
+            {
+                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+
+            }
+            model.GalleryImages = Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
+                                                .Select(fn => Path.GetFileName(fn));
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            using (Db db = new Db())
+            {
+                if (db.Products.Where(x => x.Id !=id).Any(x=>x.Name ==model.Name))
+                {
+
+                }
+            }
+                return View();
+        }
 
     }
-
-
 }
