@@ -299,12 +299,38 @@ namespace CmsShop.Areas.Admin.Controllers
             }
             using (Db db = new Db())
             {
-                if (db.Products.Where(x => x.Id !=id).Any(x=>x.Name ==model.Name))
+                if (db.Products.Where(x => x.Id != id).Any(x => x.Name == model.Name))
                 {
-
+                    ModelState.AddModelError("", "Ta nazwa produktu jest już zajęta");
+                    return View(model);
                 }
             }
-                return View();
+
+            using (Db db = new Db())
+            {
+                ProductDTO dto = db.Products.Find(id);
+                dto.Name = model.Name;
+                dto.Description = model.Description;
+                dto.Slug = model.Name.Replace(" ","-").ToLower();
+                dto.Price = model.Price;
+                dto.CategoryId = model.CategoryId;
+                dto.ImageName = model.ImageName;
+
+
+                CategoryDTO catDTO = db.Categories.FirstOrDefault(x => x.Id == model.CategoryId);
+                dto.CategoryName = catDTO.Name;
+
+                db.SaveChanges();
+            }
+            TempData["SM"] = "Edytowałeś produkt";
+
+            #region Image Upload
+
+                    
+
+            #endregion
+
+            return RedirectToAction("EditProduct");
         }
 
     }
