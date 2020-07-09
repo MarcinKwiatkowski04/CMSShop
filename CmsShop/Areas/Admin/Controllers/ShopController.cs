@@ -311,7 +311,7 @@ namespace CmsShop.Areas.Admin.Controllers
                 ProductDTO dto = db.Products.Find(id);
                 dto.Name = model.Name;
                 dto.Description = model.Description;
-                dto.Slug = model.Name.Replace(" ","-").ToLower();
+                dto.Slug = model.Name.Replace(" ", "-").ToLower();
                 dto.Price = model.Price;
                 dto.CategoryId = model.CategoryId;
                 dto.ImageName = model.ImageName;
@@ -326,7 +326,58 @@ namespace CmsShop.Areas.Admin.Controllers
 
             #region Image Upload
 
-                    
+            if (file != null && file.ContentLength > 0)
+            {
+                string ext = file.ContentType.ToLower();
+                if (ext != "image/jpg" &&
+                    ext != "image/png" &&
+                    ext != "image/jpeg" &&
+                    ext != "image/gif" &&
+                    ext != "image/pjepg" &&
+                    ext != "image/x-png")
+                {
+                    using (Db db = new Db())
+                    {
+                        model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                        ModelState.AddModelError("", "Obraz nie został przesłany - nieprawidłowe rozszerzenie.");
+
+                        return View(model);
+                    }
+                }
+                var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
+
+                var pathString1 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+                var pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Thumbs");
+
+                DirectoryInfo di1 = new DirectoryInfo(pathString1);
+                DirectoryInfo di2 = new DirectoryInfo(pathString2);
+
+                foreach (var file2 in di1.GetFiles())
+                {
+                    file2.Delete();
+                }
+
+                foreach (var file3 in di2.GetFiles())
+                {
+                    file3.Delete();
+                }
+
+                string imageName = file.FileName;
+                using (Db db = new Db())
+                {
+                    ProductDTO dto = db.Products.Find(id);
+                    dto.ImageName = imageName;
+                    db.SaveChanges();
+                }
+
+                var path = string.Format("{0}\\{1}", pathString1,imageName);
+                var path2 = string.Format("{0}\\{1}", pathString2,imageName);
+
+                file.SaveAs(path);
+                WebImage img = new WebImage(file.InputStream);
+                img.Resize(200, 200);
+                img.Save(path2);
+            }
 
             #endregion
 
