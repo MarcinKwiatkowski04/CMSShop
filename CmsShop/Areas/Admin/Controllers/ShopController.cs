@@ -370,8 +370,8 @@ namespace CmsShop.Areas.Admin.Controllers
                     db.SaveChanges();
                 }
 
-                var path = string.Format("{0}\\{1}", pathString1,imageName);
-                var path2 = string.Format("{0}\\{1}", pathString2,imageName);
+                var path = string.Format("{0}\\{1}", pathString1, imageName);
+                var path2 = string.Format("{0}\\{1}", pathString2, imageName);
 
                 file.SaveAs(path);
                 WebImage img = new WebImage(file.InputStream);
@@ -383,6 +383,26 @@ namespace CmsShop.Areas.Admin.Controllers
 
             return RedirectToAction("EditProduct");
         }
+        // GET:Admin/Shop/DeleteProduct/id
+        [HttpGet]
+        public ActionResult DeleteProduct(int id)
+        {
+            using (Db db = new Db())
+            {
+                ProductDTO dto = db.Products.Find(id);
+                db.Products.Remove(dto);
+                db.SaveChanges();
+            }
 
+            var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\\")));
+            var pathString = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+
+            if(Directory.Exists(pathString))
+            {
+                Directory.Delete(pathString, true);
+            }
+
+                return RedirectToAction("Products");
+        }
     }
 }
