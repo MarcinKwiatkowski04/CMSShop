@@ -94,7 +94,7 @@
     </h3>
 
 }
-<form action="/Admin/Shop/SaveGalleryImages" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+<form action="/Admin/Shop/SaveGalleryImages?id=@Model.Id" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
     <div class="fallback">
         <input type="file" name="file" multiple />
         <input type="submit" value="Upload" />

@@ -397,12 +397,43 @@ namespace CmsShop.Areas.Admin.Controllers
             var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\\")));
             var pathString = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
 
-            if(Directory.Exists(pathString))
+            if (Directory.Exists(pathString))
             {
                 Directory.Delete(pathString, true);
             }
 
-                return RedirectToAction("Products");
+            return RedirectToAction("Products");
+        }
+
+        // POST:Admin/Shop/SaveGalleryImages/id
+        [HttpPost]
+        public ActionResult SaveGalleryImages(int id)
+        {
+            foreach (string fileName in Request.Files)
+            {
+                HttpPostedFileBase file = Request.Files[fileName];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    var originalDirectory = new DirectoryInfo(string.Format("{0}Images\\Uploads", Server.MapPath(@"\")));
+                    string pathString1 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString()+"\\Gallery");
+                    string pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString()+"\\Gallery\\Thumbs");
+
+
+                    var path = string.Format("{0}\\{1}", pathString1, file.FileName);
+                    var path2 = string.Format("{0}\\{1}", pathString2, file.FileName);
+
+                    file.SaveAs(path);
+                    WebImage img = new WebImage(file.InputStream);
+                    img.Resize(200, 200);
+                    img.Save(path2);
+                }
+            }
+            using (Db db = new Db())
+            {
+
+            }
+            return RedirectToAction("Products");
         }
     }
 }
